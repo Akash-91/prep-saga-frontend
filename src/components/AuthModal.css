@@ -1,0 +1,143 @@
+/* AuthModal Styles */
+
+/* Overlay background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure it appears above other content */
+}
+
+/* Modal Container */
+.modal-container {
+  background-color: white;
+  width: 400px; /* Adjust width as needed */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+/* Close Button */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem; /* Slightly smaller size */
+  cursor: pointer;
+  color: #888;
+  padding: 0; /* Remove extra padding */
+  width: 30px; /* Fixed width */
+  height: 30px; /* Fixed height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.close-btn:focus {
+  outline: none; /* Remove outline when focused */
+}
+
+
+/* Modal Body */
+.modal-body {
+  margin-top: 20px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.toggle-link {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.toggle-link:hover {
+  text-decoration: underline;
+}
+
+/* Form input styles */
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #4CAF50; /* Change border color on focus */
+  outline: none;
+}
+
+/* Button Styles */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* Error Message */
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 100%;
+    margin: 0 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .close-btn {
+    font-size: 1.3rem;
+  }
+}

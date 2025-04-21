@@ -1,0 +1,80 @@
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4rem 6rem;
+  background: linear-gradient(135deg, #f0f4ff, #e2eaff);
+  height: 90vh;
+}
+
+.hero-left {
+  flex: 1;
+  padding-right: 3rem;
+}
+
+.hero-left h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero-left p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.cta-button {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  background-color: #005eff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #003cb3;
+}
+
+.hero-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-right img {
+  width: 100%;
+  max-width: 500px;
+}
+.small-btn {
+  padding: 8px 16px; /* Reduce padding for a smaller button */
+  font-size: 14px;    /* Smaller font size */
+  background-color: #e2574e; /* Button color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 25px; /* Rounded corners */
+  cursor: pointer;
+  max-width: 160px;   
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Add hover effect for interactivity */
+.small-btn:hover {
+  background-color: #536856; /* Darker shade on hover */
+  transform: scale(1.05); /* Slightly enlarge button on hover */
+}
+
+.hero-left h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}

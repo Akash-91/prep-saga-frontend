@@ -1,0 +1,28 @@
+/* styles.css or Register.css/Login.css */
+.form-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  button {
+    padding: 0.6rem 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 0.5rem;
+  }
+  
