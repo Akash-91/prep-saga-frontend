@@ -7,6 +7,8 @@ import Hero from './components/Hero';
 import UserDashboard from './components/UserDashboard';
 import TopicDetail from './pages/TopicDetail';
 import AdminDashboard from './components/AdminDashboard';
+import OAuth2Callback from './components/OAuth2Callback';  // adjust path if necessary
+
 
 const App: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -38,10 +40,12 @@ useEffect(() => {
         <Route
           path="/userDashboard"
           element={
-            isAuthenticated && user?.role === 'USER' ? (
-              <UserDashboard />
-            ) : isAuthenticated ? (
-              <Navigate to={`/${user?.role === 'ADMIN' ? 'adminDashboard' : ''}`} />
+            isAuthenticated ? (
+              user?.role === 'USER' ? (
+                <UserDashboard />
+              ) : (
+                <Navigate to="/adminDashboard" />
+              )
             ) : (
               <Navigate to="/" />
             )
@@ -51,20 +55,31 @@ useEffect(() => {
         <Route
           path="/adminDashboard"
           element={
-            isAuthenticated && user?.role === 'ADMIN' ? (
-              <AdminDashboard />
-            ) : isAuthenticated ? (
-              <Navigate to={`/${user?.role === 'USER' ? 'userDashboard' : ''}`} />
+            isAuthenticated ? (
+              user?.role === 'ADMIN' ? (
+                <AdminDashboard />
+              ) : (
+                <Navigate to="/userDashboard" />
+              )
             ) : (
               <Navigate to="/" />
             )
           }
         />
 
+
         <Route
           path="/topics/:title"
           element={isAuthenticated ? <TopicDetail /> : <Navigate to="/" />}
         />
+
+
+        <Route
+          path="/oauth2/callback"
+          element={<OAuth2Callback />}
+          // This route handles the response from the OAuth2 provider
+        />
+
       </Routes>
     </div>
   );

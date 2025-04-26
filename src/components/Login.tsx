@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 interface LoginProps {
-  onLoginSuccess: () => void;  // Function to close modal after successful login
+  onLoginSuccess: () => void; // Function to close modal after successful login
 }
 
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
@@ -17,21 +18,20 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const loggedInUser = await login(email, password);
+      const loggedInUser = await login(email, password); // Login with email/password
 
       if (loggedInUser) {
         console.log('User role:', loggedInUser.role);
 
-        // Navigate to the correct dashboard
+        // Navigate to the correct dashboard based on user role
         if (loggedInUser.role === 'ADMIN') {
           navigate('/adminDashboard');
         } else {
           navigate('/userDashboard');
         }
 
-        // ⭐ VERY IMPORTANT: Close the login popup/modal
+        // Close the login modal after successful login
         onLoginSuccess();
-
       } else {
         alert('Invalid credentials');
       }
@@ -43,26 +43,44 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    // Redirect to backend OAuth2 login endpoint (this starts the Google OAuth flow)
+    window.location.href = "http://localhost:8082/oauth2/authorization/google";
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-      />
-      <button type="submit" disabled={loading}>
-        {loading ? 'Logging in...' : 'Login'}
+    <div className="auth-form">
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+
+      {/* Divider */}
+      <div style={{ textAlign: "center", margin: "20px 0" }}>
+        <span>OR</span>
+      </div>
+
+      {/* Google Login Button */}
+      <button onClick={handleGoogleLogin} className="google-login-btn">
+        <img src="/assets/google-icon.png" alt="Google Icon" style={{ width: "20px", marginRight: "10px" }} />
+        Login with Google
       </button>
-    </form>
+    </div>
   );
 };
 

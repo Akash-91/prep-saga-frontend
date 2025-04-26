@@ -9,7 +9,7 @@ interface User {
 interface AuthContextType {
   token: string | null;
   user: User | null;
-  login: (email: string, password: string) => Promise<User | null>;
+  login: (email?: string, password?: string, googleToken?: string) => Promise<User | null>;
   register: (
     firstName: string,
     lastName: string,
@@ -43,27 +43,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return JSON.parse(jsonPayload);
   }
 
-  const login = async (email: string, password: string): Promise<User | null> => {
-    try {
-      const response = await axios.post('http://localhost:8082/api/auth/login', { email, password });
-      const { token: bearerToken, role, email: userEmail } = response.data;
+  const login = async (
+    email?: string,
+    password?: string,
+    googleToken?: string
+  ): Promise<User | null> => {
+    if (email && password) {
+      // Email/password login
+      try {
+        const response = await axios.post('http://localhost:8082/api/auth/login', { email, password });
+        const { token: bearerToken, role, email: userEmail } = response.data;
 
-      localStorage.setItem('token', bearerToken);
-      setToken(bearerToken);
-      setIsAuthenticated(true);
-      setError(null);
+        localStorage.setItem('token', bearerToken);
+        setToken(bearerToken);
+        setIsAuthenticated(true);
+        setError(null);
 
-      const decoded = decodeJWT(bearerToken);
-      const userData: User = {
-        role: decoded.role || role, // Use decoded OR response fallback
-        email: decoded.sub || userEmail, // JWT `sub` typically has email
-      };
-      setUser(userData);
-      return userData;
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
-      setIsAuthenticated(false);
-      setUser(null);
+        const decoded = decodeJWT(bearerToken);
+        const userData: User = {
+          role: decoded.role || role,
+          email: decoded.sub || userEmail,
+        };
+        setUser(userData);
+        return userData;
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'Login failed');
+        setIsAuthenticated(false);
+        setUser(null);
+        return null;
+      }
+    } else if (googleToken) {
+      // Google OAuth login
+      try {
+        const response = await axios.post('http://localhost:8082/api/auth/google-login', { token: googleToken });
+        const { token: bearerToken, role, email: userEmail } = response.data;
+
+        localStorage.setItem('token', bearerToken);
+        setToken(bearerToken);
+        setIsAuthenticated(true);
+        setError(null);
+
+        const decoded = decodeJWT(bearerToken);
+        const userData: User = {
+          role: decoded.role || role,
+          email: decoded.sub || userEmail,
+        };
+        setUser(userData);
+        return userData;
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'Google login failed');
+        setIsAuthenticated(false);
+        setUser(null);
+        return null;
+      }
+    } else {
+      // Handle case where neither email/password nor googleToken is provided
+      setError('No login method provided');
       return null;
     }
   };
