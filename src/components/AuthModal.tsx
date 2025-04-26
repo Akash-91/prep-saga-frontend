@@ -1,32 +1,34 @@
 import React, { useState } from 'react';
 import Login from './Login';
 import Register from './Register';
-import './AuthModal.css'; // Create a CSS file to style this modal
+import './AuthModal.css';
 
-const AuthModal = ({ closeModal }: { closeModal: () => void }) => {
-  const [showLogin, setShowLogin] = useState(true); // Toggle between login and register form
+interface AuthModalProps {
+  closeModal: () => void;
+}
 
-  const toggleForm = () => {
-    setShowLogin(!showLogin);
-  };
+const AuthModal: React.FC<AuthModalProps> = ({ closeModal }) => {
+  const [showLogin, setShowLogin] = useState(true);
+
+  const toggleForm = () => setShowLogin(prev => !prev);
 
   return (
     <div className="modal-overlay">
       <div className="modal-container">
         <div className="modal-header">
           <h2>{showLogin ? 'Login' : 'Register'}</h2>
-          <button onClick={closeModal} className="close-btn">X</button>
+          <button onClick={closeModal} className="close-btn">×</button>
         </div>
         <div className="modal-body">
           {showLogin ? (
-            <Login onLoginSuccess={closeModal} /> // Passing the closeModal as the onLoginSuccess callback
+            <Login onLoginSuccess={closeModal} />
           ) : (
             <Register />
           )}
         </div>
         <div className="modal-footer">
           <p>
-            {showLogin ? "Don't have an account?" : 'Already have an account?'}
+            {showLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
             <span onClick={toggleForm} className="toggle-link">
               {showLogin ? 'Register' : 'Login'}
             </span>

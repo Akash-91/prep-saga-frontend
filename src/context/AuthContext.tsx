@@ -1,11 +1,21 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
-import { registerUser } from '../services/authService';
+
+interface User {
+  role: string;
+  email: string;
+}
 
 interface AuthContextType {
   token: string | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (firstName: string, lastName: string, email: string, password: string) => Promise<boolean>;
+  user: User | null;
+  login: (email: string, password: string) => Promise<User | null>;
+  register: (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
   error: string | null;
@@ -15,22 +25,46 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+  const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
   const [error, setError] = useState<string | null>(null);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  // Decode JWT payload (after stripping 'Bearer ')
+  function decodeJWT(token: string): any {
+    const pureToken = token.replace('Bearer ', '');
+    const base64Url = pureToken.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  }
+
+  const login = async (email: string, password: string): Promise<User | null> => {
     try {
       const response = await axios.post('http://localhost:8082/api/auth/login', { email, password });
-      const { token } = response.data;
-      localStorage.setItem('token', token);
-      setToken(token);
+      const { token: bearerToken, role, email: userEmail } = response.data;
+
+      localStorage.setItem('token', bearerToken);
+      setToken(bearerToken);
       setIsAuthenticated(true);
       setError(null);
-      return true;
+
+      const decoded = decodeJWT(bearerToken);
+      const userData: User = {
+        role: decoded.role || role, // Use decoded OR response fallback
+        email: decoded.sub || userEmail, // JWT `sub` typically has email
+      };
+      setUser(userData);
+      return userData;
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
       setIsAuthenticated(false);
-      return false;
+      setUser(null);
+      return null;
     }
   };
 
@@ -41,12 +75,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     password: string
   ): Promise<boolean> => {
     try {
-      await registerUser(firstName, lastName, email, password); // success if no error thrown
+      await axios.post('http://localhost:8082/api/auth/register', {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
       setError(null);
       return true;
     } catch (err: any) {
-      const message = err?.response?.data?.message || 'Registration failed';
-      setError(message);
+      setError(err?.response?.data?.message || 'Registration failed');
       return false;
     }
   };
@@ -54,11 +92,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);
+    setUser(null);
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, register, logout, isAuthenticated, error }}>
+    <AuthContext.Provider value={{ token, user, login, register, logout, isAuthenticated, error }}>
       {children}
     </AuthContext.Provider>
   );
