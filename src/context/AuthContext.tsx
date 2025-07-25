@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (email && password) {
       // Email/password login
       try {
-        const response = await axios.post('http://localhost:8082/api/auth/login', { email, password });
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, { email, password });
         const { token: bearerToken, role, email: userEmail } = response.data;
 
         localStorage.setItem('token', bearerToken);
@@ -75,7 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } else if (googleToken) {
       // Google OAuth login
       try {
-        const response = await axios.post('http://localhost:8082/api/auth/google-login', { token: googleToken });
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/google-login`, { token: googleToken });
         const { token: bearerToken, role, email: userEmail } = response.data;
 
         localStorage.setItem('token', bearerToken);
@@ -110,7 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     password: string
   ): Promise<boolean> => {
     try {
-      await axios.post('http://localhost:8082/api/auth/register', {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
         firstName,
         lastName,
         email,

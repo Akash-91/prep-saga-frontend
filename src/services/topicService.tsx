@@ -1,5 +1,5 @@
 // src/services/topicService.ts
-const API_BASE_URL = 'http://localhost:8082/api/topics';
+const API_BASE_URL = '${process.env.REACT_APP_BACKEND_URL}/api/topics';
 
 export const fetchTopicByTitle = async (title: string) => {
   const response = await fetch(`${API_BASE_URL}/${encodeURIComponent(title)}`);

@@ -16,7 +16,7 @@ const Dashboard: React.FC = () => {
   const { token } = useAuth();
 
   const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8082/api',
+    baseURL: `${process.env.REACT_APP_BACKEND_URL}/api`,
   });
 
   axiosInstance.interceptors.request.use(

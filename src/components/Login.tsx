@@ -45,7 +45,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
 
   const handleGoogleLogin = () => {
     // Redirect to backend OAuth2 login endpoint (this starts the Google OAuth flow)
-    window.location.href = "http://localhost:8082/oauth2/authorization/google";
+    window.location.href = `${process.env.REACT_APP_BACKEND_URL}/oauth2/authorization/google`;
   };
 
   return (
