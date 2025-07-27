@@ -4,7 +4,7 @@ export const registerUser = async (
   email: string,
   password: string
 ) => {
-  const response = await fetch(`http://localhost:8082/api/auth/register`, {
+  const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
