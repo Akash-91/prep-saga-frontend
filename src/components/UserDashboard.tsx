@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import './UserDashboard.css';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Topic {
   id: number;
@@ -24,6 +25,7 @@ const Dashboard: React.FC = () => {
       const localToken = localStorage.getItem('token');
       if (localToken) {
         config.headers['Authorization'] = `${localToken}`;
+        config.headers['x-correlation-id'] = uuidv4();
       }
       return config;
     },

@@ -4,6 +4,7 @@ import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './AdminDashboard.css';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Topic {
   id: number;
@@ -32,6 +33,7 @@ const AdminDashboard: React.FC = () => {
       if (token) {
         config.headers['Authorization'] = `${token}`;
       }
+      config.headers['x-correlation-id'] = uuidv4(); // for tracing
       return config;
     },
     (error) => Promise.reject(error)
