@@ -127,9 +127,7 @@ const AdminDashboard: React.FC = () => {
           >
             <div className="tile-content">
               <h3 className="tile-title">{topic.title}</h3>
-              <p className="tile-summary">
-                {topic.summary ? topic.summary.substring(0, 100) + '...' : 'No summary available.'}
-              </p>
+              <div className="tile-summary" dangerouslySetInnerHTML={{ __html: topic.summary }} />
             </div>
 
             <div className="tile-actions">
