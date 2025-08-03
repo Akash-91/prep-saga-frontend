@@ -44,3 +44,30 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+# Navigate to frontend directory
+cd prep-saga-frontend
+
+# Build Docker image
+docker build -t akash91/prep-frontend:latest .
+
+# Run locally with env variables
+docker run -p 3000:3000 --env-file .env akash91/prep-frontend:latest
+
+# Login to Docker Hub
+docker login
+
+# Push to Docker Hub
+docker push akash91/prep-frontend:latest
+
+
+
+ Optional: Test Docker Image Locally (Using Docker Compose)
+You can also create a docker-compose.yml (let me know if you want this) to:
+
+Spin up both backend and frontend together
+
+Mount .env files
+
+Define shared network for local testing
